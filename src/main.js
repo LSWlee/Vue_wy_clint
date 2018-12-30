@@ -5,10 +5,12 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import router from './router/index'
-import './Mock/index'
+import './Mock/MockServe'
+import store from './store/index'
 
 new Vue({
   el:'#app',
   render:h=>h(App),
-  router
+  router,
+  store
 })
