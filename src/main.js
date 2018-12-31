@@ -8,6 +8,10 @@ import router from './router/index'
 import './Mock/MockServe'
 import store from './store/index'
 
+import Split from './components/Splite/Splite.vue'
+
+Vue.component('Split',Split)
+
 new Vue({
   el:'#app',
   render:h=>h(App),

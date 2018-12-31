@@ -6,6 +6,9 @@ import {RECEIVE_SHOPS,RECEIVE_CART_LIST} from '../mutation_types'
 const state = {
   shops:{},
   cartList:[],
+  kingKongList:[],
+  categoryList:[]
+
 }
 const actions = {
  async getMain({commit}){
@@ -30,6 +33,8 @@ const getters = {
 const mutations = {
   [RECEIVE_SHOPS](state,{shops}){
     state.shops = shops
+    state.kingKongList = shops.kingKongModule.kingKongList
+    state.categoryList = shops.categoryHotSellModule.categoryList
   },
   [RECEIVE_CART_LIST](state,{cartList}){
     state.cartList = cartList
