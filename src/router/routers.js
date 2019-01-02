@@ -6,7 +6,7 @@ import Classify from '../pages/Classify/Classify.vue'
 import Persion from '../pages/Persion/Persion.vue'
 import See from '../pages/See/See.vue'
 import ShopCart from '../pages/ShopCart/ShopCart.vue'
-
+import SelectPerson from '../pages/SelectPerson/SelectPerson.vue'
 export default [
   {
     path:'/msite',
@@ -22,11 +22,15 @@ export default [
   },
   {
     path:'/see',
-    component:See
+    component:See,
   },
   {
     path:'/shopCart',
     component:ShopCart
+  },
+  {
+    path:'/selectperson',
+    component:SelectPerson
   },
   {
     path:'/',
