@@ -56,7 +56,8 @@
     width 100%
     height 1.30667rem;
     position fixed
-    bottom 0;
+    bottom 0px;
+    z-index 50
     a
       display flex
       flex-direction column

@@ -24,10 +24,38 @@
             </div>
           </div>
         </div >
-        <div class="toggleTap">
+        <!--三角切换-->
+        <div class="m-indexHd">
+          <div class="line">
+            <a href="javascript:;" class="logo">
+              <img src="./images/logo.png" alt="logo">
+            </a>
+            <div class="m-topSearchIpt">
+              <i class="iconfont icon-sousuo1"></i>
+              <span class="placeholder">搜索商品, 共19999款好物</span>
+            </div>
+            <div class="loginBtn">登陆</div>
+          </div>
+          <div class="tabWrap" v-show="isHave">
+            <div class="tabAlter">全部频道</div>
+            <div class="toggleWrap">
+              <div class="toggle">
+                <i class="iconfont"></i>
+              </div>
+            </div>
+            <div class="moreCate">
+              <div class="cateTag" :class="{active:isShow}" @click="yes">推荐</div>
+              <div class="cateTag" v-for="(cart,index) in cartList" :key="index" :class="{active:subCateList===index}" @click="isAdd(index)">{{cart.name}}</div>
+            </div>
+          </div>
+          <div class="mask" v-show="isHave"  @click.stop="isHave=!isHave"></div>
+        </div>
+        <div class="toggleTap" @click.stop="isHave=!isHave">
+        <transition name="move">
           <div class="toggle">
             <i class="iconfont icon-iconfontjiantou"></i>
           </div>
+        </transition>
         </div>
       </div>
     </div>
@@ -403,7 +431,71 @@
       </div>
       <Split/>
 
-
+      <!--最后一个-->
+      <div v-for="(esx,index) in shops.categoryModule" :key="index">
+        <div class="m-categoryModule">
+          <div class="categorys">
+            <a href="javascript:;" class="bannder">
+              <img :src="esx.titlePicUrl" alt="">
+            </a>
+            <div class="m-goodGrid">
+              <div class="inner">
+                <ul class="list">
+                  <li class="item" v-for="(item,index) in esx.itemList" :key="index">
+                    <a href="javascript:;" class="good">
+                      <div class="hd">
+                        <div class="wraper">
+                          <img :src="item.listPicUrl" alt="">
+                        </div>
+                      </div>
+                      <div class="name">
+                        <span>{{item.name}}</span>
+                      </div>
+                      <div class="price">
+                      <span class="priceInner">
+                        <span class="newPrice">
+                          <span>￥</span>
+                          <span>{{item.retailPrice}}</span>
+                        </span>
+                        <span class="counterPrice">
+                          <span>￥</span>
+                          <span>{{item.counterPrice}}</span>
+                        </span>
+                      </span>
+                      </div>
+                      <div class="tagWraper">
+                        <p class="status" v-if="item.tagName">
+                          {{item.tagName}}
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Split/>
+      </div>
+      <Split/>
+      <div class="m-ftWrap">
+        <div class="m-ft">
+          <div class="bd">
+            <a href="javascript:;" class="goApp">
+              下载APP
+            </a>
+            <a href="javascript:;" class="goWeb">
+              电脑板
+            </a>
+          </div>
+          <p class="copyright">
+            <span>网易公司版权所有 © 1997-</span>
+            <span>2019</span>
+            <br>
+            <span>食品经营许可证：JY13301080111719</span>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -418,10 +510,18 @@
       return{
         isShow:true,
         subCateList:'',
+        isHave:false
       }
     },
     mounted(){
-      this.$store.dispatch('getMain')
+      this.$store.dispatch('getMain',()=>{
+        this.$nextTick(()=>{
+           new BScroll('.m-categoryModule .inner',{
+            click:true,
+            scrollX:true,
+          })
+        })
+      })
       this.$store.dispatch('getCartList',()=>{
         this.$nextTick(()=>{
           //需要动态计算tap的个数
@@ -446,7 +546,17 @@
         const result = categoryList.splice(0,2)
         this.categoryList = categoryList
         return categoryList
-      }
+      },
+      oldCategoryName(){
+        const {categoryList} = this
+        const res = categoryList.splice(0,2)
+        return res
+      },
+//      categoryList:{
+//        set(){
+//          return this.categoryList
+//        }
+//      }
     },
     watch:{
       shops(){
@@ -476,9 +586,14 @@
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
   #header
+    position fixed
+    left 0px
+    top 0px
+    z-index 50
     .search_shop
       display flex
       padding: .21333rem .4rem;
+      background #fff
       .secrch_text
         display flex
         justify-content: center;
@@ -510,12 +625,12 @@
         margin-left: .21333rem;
         font-size: .32rem;
         margin-top 8px
-
-
     .taps
       height:0.866rem
       margin-top: -.01333rem;
       display flex
+      background #fff
+      width 750px
       .m-taps
         width 1400px
         .inner
@@ -553,26 +668,139 @@
               width: 100%;
               height: .05333rem;
               background-color: #b4282d;
-      .toggleTap
-        width 20%
-        background yellow
+      .m-indexHd
+        width 100%
+        border-bottom: 1px solid #d9d9d9;
+        position fixed
+        left 0px
+        top 0px
+        .line
+          align-items: center;
+          background: #fff;
+          padding: .21333rem .4rem;
+          -webkit-box-align: center;
+          position: relative;
+          z-index: 2;
+          display flex
+          .logo
+            width: 1.84rem;
+            height: .53333rem;
+            display: inline-block;
+            margin-right: .26667rem;
+            background-size: cover;
+            background-position: center;
+          .m-topSearchIpt
+            display flex
+            flex-grow: 1;
+            justify-content: center;
+            height: .74667rem;
+            font-size: .37333rem;
+            background-color: #ededed;
+            border-radius: .10667rem;
+            align-items: center;
+            -webkit-box-pack: center;
+            .iconfont
+              display: inline-block;
+              vertical-align: middle;
+              background-repeat: no-repeat;
+              background-size: 100% 100%;
+              width: 0.47333rem
+              height: 0.47333rem
+              margin-right: .13333rem;
+              font-size 40px
+            .placeholder
+              color: #666;
+          .loginBtn
+            width: .98667rem;
+            height: .53333rem;
+            line-height: .53333rem;
+            text-align: center;
+            color: #b4282d;
+            border: 1px solid #b4282d;
+            border-radius: .10667rem;
+            margin-left: .21333rem;
+            font-size: .32rem;
+        .tabWrap
+          position: relative;
+          z-index: 2;
+          background: #fff;
+          margin-top: -.01333rem;
+          .tabAlter
+            height: .8rem;
+            line-height: .8rem;
+            padding-left: .4rem;
+            font-size: .37333rem;
+            border-top 1px solid gainsboro
+          .toggleWrap
+            border-top 1px solid gainsboro
+            display flex
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+            align-items: center;
+            .toggle
+              width: 1.33333rem;
+              height: .8rem;
+              text-align: center;
+              background: #fff
+              .iconfont
+                margin-top: .2rem;
+                display: inline-block;
+                vertical-align: middle;
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+                width: .4rem;
+                height: .4rem;
+          .moreCate
+            padding-top: .32rem;
+            overflow: hidden;
+            .cateTag
+              width: 2rem;
+              height: .74667rem;
+              line-height: .74667rem;
+              text-align: center;
+              float: left;
+              margin-bottom: .53333rem;
+              margin-left: .4rem;
+              background: #FAFAFA;
+              border: 1px solid #CCC;
+              border-radius: .05333rem;
+              &.active
+                border: 1px solid #b4282d;
+                color: #b4282d;
+        .mask
+          position: fixed;
+          z-index: 1;
+          background: rgba(0,0,0,.5);
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+  .toggleTap
+      width 20%
+      background #fff
+      position absolute
+      left 600px
+      height: .8rem;
+      .toggle
+        margin-top: .2rem;
+        display: inline-block;
+        vertical-align: middle;
+        font-size 30px
         position absolute
-        right 0
-        height: .8rem;
-        .toggle
-          margin-top: .2rem;
-          display: inline-block;
-          vertical-align: middle;
-          font-size 30px
-          position absolute
-          left 89px
-          top 0px
-          .iconfont
-            font-size 35px
+        left 89px
+        top 0px
+        &.move-enter-active,&.move-leave-active
+          transition transform 0.5s
+        &.move-enter,&.move-leave-to
+          transform rotate(180deg)
+        .iconfont
+          font-size 35px
   .swiper-container
     width 100%
-    background pink
     height: 4.93333rem;
+    margin-top 150px
     .swiper-wrapper
       width 800%
       height 100%
@@ -583,10 +811,6 @@
         img
           width 100%
           height 100%
-
-
-
-
   .advantage
     background-color: #FFFFFF;
     .items
@@ -611,7 +835,6 @@
     .classify
       width 100%
       height: 5.22667rem;
-      background pink
       .items
         height 100%
         flex-shrink: 0;
@@ -640,7 +863,6 @@
 
 
     .newPerson
-      background pink
       position relative
       .moduleTitle
         height: 1.2rem;
@@ -723,7 +945,6 @@
                 top: 1.2rem;
                 width: 2.66667rem;
                 height: 2.66667rem;
-                background pink
               .discount
                 position: absolute;
                 top: 0;
@@ -773,7 +994,6 @@
                 top: 4.1rem;
                 width: 2.66667rem;
                 height: 2.66667rem;
-                background pink
               .discount
                 position: absolute;
                 top: 0;
@@ -1219,4 +1439,140 @@
             height: 2rem;
             float: left;
             margin-right: .05333rem;
+    .m-categoryModule
+      .categorys
+        margin-bottom: .26667rem;
+        .bannder
+          display: block;
+          width: 100%;
+          height: 4.93333rem;
+          margin-bottom: 0.66667rem
+          img
+            width 100%
+        .m-goodGrid
+          .inner
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+            height: auto;
+            padding: 0 .4rem .4rem;
+            .list
+              position: relative;
+              z-index: 0;
+              height: auto;
+              width 277%
+              overflow hidden
+              .item
+                padding: 0!important;
+                margin-right: .26667rem;
+                width: 2.66667rem;
+                height: auto;
+                float left
+                .good
+                  width: 100%;
+                  display: block;
+                  .hd
+                    border-radius: .05333rem;
+                    position: relative;
+                    z-index: 0;
+                    background-color: #f4f4f4;
+                    .wraper
+                      background-color: #f4f4f4;
+                      border-radius: 4;
+                      padding-bottom: 100%;
+                      margin-bottom: .16rem;
+                      position: relative;
+                      img
+                        background-color: #f4f4f4;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        position: absolute;
+                  .name
+                    padding-left: 0;
+                    font-size: .32rem;
+                    margin-top: 0;
+                    line-height: .48rem;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    white-space: normal;
+                  .price
+                    margin-bottom: .05333rem;
+                    padding-left: 0;
+                    font-size: .32rem;
+                    line-height: .48rem;
+                    color: #b4282d;
+                    .priceInner
+                      color: #b4282d;
+                    .counterPrice
+                      margin-left: .10667rem;
+                      font-size: .32rem;
+                      line-height: .48rem;
+                      color: #999;
+                  .tagWraper
+                    width: 100%;
+                    z-index: 1;
+                    margin: 0 0 .05333rem;
+                    height: .41333rem;
+                    overflow: hidden;
+                    padding-left: 0;
+                    text-align: left;
+                    .status
+                      margin-bottom: .06667rem;
+                      padding: 0 .10667rem;
+                      line-height: .37333rem;
+                      height: .4rem;
+                      text-align: center;
+                      color: #B4282D;
+                      background: rgba(255,255,255,.9);
+                      border: 1px solid #B4282D;
+                      font-size: .26667rem;
+                      border-radius: .02667rem;
+                      display: inline-block;
+                      vertical-align: middle;
+                      zoom: 1;
+    .m-ftWrap
+      border-top: 1px solid rgba(0,0,0,.15);
+      background-color: #414141;
+      padding-bottom 100px
+      .m-ft
+        text-align: center;
+        padding: .72rem .26667rem .37333rem;
+        .bd
+          .goApp
+            height: .82667rem;
+            line-height: .82667rem;
+            width: 2.29333rem;
+            font-size: .32rem;
+            color: #fff;
+            margin-right: .66667rem;
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            border: 1px solid #fff;
+            border-radius: 4px;
+            overflow: hidden;
+          .goWeb
+            background-color: transparent;
+            height: .82667rem;
+            line-height: .82667rem;
+            width: 2.29333rem;
+            font-size: .32rem;
+            color: #fff;
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            border: 1px solid #fff;
+            border-radius: 4px;
+            overflow: hidden;
+        .copyright
+          margin-top: .48rem;
+          font-size: .32rem;
+          line-height: .42667rem;
+          color: #999;
 </style>

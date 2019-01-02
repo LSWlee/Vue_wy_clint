@@ -8,6 +8,8 @@ import actions from './actions'
 import getters from './getters'
 
 import msite from './modules/msite'
+import classIfy from './modules/classIfy'
+import seeTaps from './modules/see'
 
 Vue.use(Vuex)
 
@@ -15,6 +17,8 @@ export default new Vuex.Store({
   actions,
   getters,
   modules:{
-    msite
+    msite,
+    classIfy,
+    seeTaps
   }
 })

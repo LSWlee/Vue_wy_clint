@@ -11,11 +11,12 @@ const state = {
 
 }
 const actions = {
- async getMain({commit}){
+ async getMain({commit},callback){
     let result = await reqMain()
    if(result.code===0){
       const shops = result.data
       commit(RECEIVE_SHOPS,{shops})
+     typeof callback==='function' && callback()
    }
   },
   async getCartList({commit},callback){

@@ -3,3 +3,9 @@
  */
 export const RECEIVE_SHOPS = 'receive_shops'
 export const RECEIVE_CART_LIST = 'receive_cart_list'
+
+export const RECEIVE_CURRENTCATEGORY = 'RECEIVE_CURRENTCATEGORY'
+
+export const RECEIVE_SEETAPS = 'RECEIVE_SEETAPS'
+
+export const RECEIVE_RECMANUAL = 'RECEIVE_RECMANUAL'
