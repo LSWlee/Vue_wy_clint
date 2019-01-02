@@ -10,8 +10,8 @@
               </a>
             </div>
             <div class="m-head-tab">
-              <a href="javascript:;" class="item" :class="{active:$router.path==='/see'}" @click="goTo('/see')">发现</a>
-              <a href="javascript:;" class="item" :class="{active:$router.path==='/selectperson'}" @click="goTo('/selectperson')">甄选家</a>
+              <a href="javascript:;" class="item" :class="{active:$route.path==='/see'}" @click="goTo('/see')">发现</a>
+              <a href="javascript:;" class="item" :class="{active:$route.path==='/selectperson'}" @click="goTo('/selectperson')">甄选家</a>
             </div>
             <div class="psc-m-right">
               <a href="javascript:;" class="psc-u-link-cart">
