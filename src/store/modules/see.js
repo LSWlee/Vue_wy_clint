@@ -1,11 +1,12 @@
 /**
  * Created by lsw on 2019/1/2 0002.
  */
-import {reqSeeTaps,reqRecManual} from '../../api'
-import {RECEIVE_SEETAPS,RECEIVE_RECMANUAL} from '../mutation_types'
+import {reqSeeTaps,reqRecManual,reqPullRefresh} from '../../api'
+import {RECEIVE_SEETAPS,RECEIVE_RECMANUAL,RECEIVE_PULLREFRESH} from '../mutation_types'
 const state = {
   seeTaps:[],
   RecManual:[],
+  PullRefresh:{},
 }
 const actions = {
   async getSeeTaps({commit}){
@@ -21,6 +22,13 @@ const actions = {
       const RecManual = result.data
       commit(RECEIVE_RECMANUAL,{RecManual})
     }
+  },
+  async getPullRefresh({commit},{page,size,tabId,}){
+    let result = await reqPullRefresh({page,size,tabId})
+    if(result.code==='200'){
+      const PullRefresh = result.data
+      commit(RECEIVE_PULLREFRESH,{PullRefresh})
+    }
   }
 }
 const mutations = {
@@ -29,6 +37,9 @@ const mutations = {
   },
   [RECEIVE_RECMANUAL](state,{RecManual}){
     state.RecManual = RecManual
+  },
+  [RECEIVE_PULLREFRESH](state,{PullRefresh}){
+    state.PullRefresh = PullRefresh
   }
 }
 const getters = {
@@ -40,7 +51,8 @@ const getters = {
       })
     })
     return newTopics
-  }
+  },
+
 }
 export default {
   state,

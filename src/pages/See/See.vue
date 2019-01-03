@@ -6,7 +6,7 @@
           <div class="psc-row">
             <div class="psc-m-hamburger">
               <a href="javascript:;" class="psc-u-nav-link">
-                <i class="iconfont icon-zhuye"></i>
+                <i class="iconfont icon-zhuye" @click="$router.push('/msite')"></i>
               </a>
             </div>
             <div class="m-head-tab">
@@ -79,7 +79,56 @@
       </div>
     </div>
 
-    <div v-show="tabType===1" style="font-size: 30px ; margin-top:100px" >达人</div>
+
+      <div class="content" v-show="tabType===1" ref="wrapper" style="height: 500px">
+        <div>
+          <div class="m-main-content" v-for="(topics,index) in PullRefresh.result">
+            <div class="m-tpls" v-if="topics.style===1">
+              <a href="javascript:;">
+                <div class="u-name">
+              <span class="ava">
+                <img :src="topics.avatar" alt="">
+              </span>
+                  <span>{{topics.nickname}}</span>
+                </div>
+                <div class="title">{{topics.title}}</div>
+                <div class="u-pic">
+                  <img :src="topics.picUrl" alt="">
+                </div>
+                <div class="u-rcount">
+                  <i class="iconfont icon-yanjing"></i>
+                  <span v-if="topics.readCount>=10000">{{topics.readCount>10000 ? getReadCount[index] : topics.readCount}}万人看过</span>
+                  <span v-if="topics.readCount<10000">{{topics.readCount>10000 ? getReadCount[index] : topics.readCount}}人看过</span>
+                </div>
+              </a>
+            </div>
+            <div class="m-tpls-picker" v-if="topics.style===2">
+              <a href="javascript:;" class="u-flexbox">
+                <div class="info">
+                  <div class="u-name">
+                <span class="ava">
+                  <img :src="topics.avatar" alt="">
+                </span>
+                    <span>{{topics.nickname}}</span>
+                  </div>
+                  <div class="title">{{topics.title}}</div>
+                  <div class="desc">{{topics.subTitle}}</div>
+                  <div class="u-rcount">
+                    <i class="iconfont icon-yanjing"></i>
+                    <span v-if="topics.readCount>=10000">{{topics.readCount>10000 ? getReadCount[index] : topics.readCount}}万人看过</span>
+                    <span v-if="topics.readCount<10000">{{topics.readCount>10000 ? getReadCount[index] : topics.readCount}}人看过</span>
+                  </div>
+                </div>
+                <div class="u-pic">
+                  <img :src="topics.picUrl" alt="">
+                </div>
+              </a>
+            </div>
+            <Split/>
+          </div>
+        </div>
+      </div>
+
 
     <div v-show="tabType===2" style="font-size: 30px ; margin-top:100px" >上新</div>
 
@@ -90,16 +139,21 @@
 </template>
 <script type="text/javascript">
   import {mapState,mapGetters} from 'vuex'
+  import BScroll from 'better-scroll'
   export default {
     data(){
       return{
-        tabType:0
+        tabType:0,
+        page:1,
+        size:5,
+        tabId:4,
       }
     },
     computed:{
       ...mapState({
         seeTaps:state => state.seeTaps.seeTaps,
-        RecManual:state => state.seeTaps.RecManual
+        RecManual:state => state.seeTaps.RecManual,
+        PullRefresh:state => state.seeTaps.PullRefresh
       }),
       ...mapGetters(['topics']),
       //处理观看人数
@@ -112,12 +166,14 @@
           }
         })
         return val
-      }
+      },
     },
     mounted(){
-      const {RecManual} = this
+      const {page,size,tabId,newPullRefresh} = this
       this.$store.dispatch('getSeeTaps')
       this.$store.dispatch('getRecManual')
+      //实现下拉刷新的请求,默认先发一次获取初始数据显示
+      this.$store.dispatch('getPullRefresh',{page:page,size:size,tabId:tabId})
     },
     methods:{
       isShow(index){
@@ -126,8 +182,27 @@
       goTo(path){
         this.$router.push(path)
       }
-    }
-  }
+    },
+   /* created(){
+      this.$nextTick(()=>{
+        this.scroll = new BScroll(this.$refs.wrapper,{
+          probeType:1,
+          click:true,
+          scrollX:false
+        })
+       this.scroll.on('scroll',(pos)=>{
+          this.$emit('scroll',pos)
+       })
+       this.scroll.on('scrollEnd',()=>{
+          if(this.scroll.y<=(this.scroll.maxScrollY + 50) ){
+            this.$emit('scrollToEnd')
+            this.page++
+            this.$store.dispatch('getPullRefresh',{page:this.page,size:5,tabId:4})
+          }
+       })
+    })
+  }*/
+}
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
   #app

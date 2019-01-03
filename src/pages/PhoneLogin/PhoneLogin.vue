@@ -5,7 +5,7 @@
         <div class="m-topBar">
           <div class="bd">
             <div class="row">
-              <a href="javascript:;" class="u-icon-home">
+              <a href="javascript:;" class="u-icon-home" @click="$router.push('/msite')">
                 <i class="iconfont icon-zhuye"></i>
               </a>
               <a href="javascript:;" class="u-icon-logo">
