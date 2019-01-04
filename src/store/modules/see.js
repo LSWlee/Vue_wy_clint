@@ -6,7 +6,7 @@ import {RECEIVE_SEETAPS,RECEIVE_RECMANUAL,RECEIVE_PULLREFRESH} from '../mutation
 const state = {
   seeTaps:[],
   RecManual:[],
-  PullRefresh:{},
+  arr:[]//下拉加载的数组
 }
 const actions = {
   async getSeeTaps({commit}){
@@ -26,7 +26,7 @@ const actions = {
   async getPullRefresh({commit},{page,size,tabId,}){
     let result = await reqPullRefresh({page,size,tabId})
     if(result.code==='200'){
-      const PullRefresh = result.data
+      const PullRefresh = result.data.result
       commit(RECEIVE_PULLREFRESH,{PullRefresh})
     }
   }
@@ -39,10 +39,13 @@ const mutations = {
     state.RecManual = RecManual
   },
   [RECEIVE_PULLREFRESH](state,{PullRefresh}){
-    state.PullRefresh = PullRefresh
+    PullRefresh.forEach((item,index)=>{
+      return state.arr.push(item)
+    })
   }
 }
 const getters = {
+
   topics(state){
     const newTopics = []
     state.RecManual.forEach((items,index) => {

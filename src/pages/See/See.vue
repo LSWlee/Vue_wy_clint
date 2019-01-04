@@ -31,7 +31,6 @@
         <!--<router-link class="itme" to="/see/expert" :class="{active:tabType===index}" @click="isShow(index)" v-for="(seeTap,index) in seeTaps" :key="index">{{seeTap.tabName}}</router-link>-->
       </div>
     </div>
-
     <div class="content" v-show="tabType===0">
       <div class="m-main-content" v-for="(topics,index) in topics">
         <div class="m-tpls" v-if="topics.style===1">
@@ -78,11 +77,10 @@
         <Split/>
       </div>
     </div>
-
-
-      <div class="content" v-show="tabType===1" ref="wrapper" style="height: 500px">
+      <div class="content" v-show="tabType===1" ref="wrapper" style="height: 1000px"
+           :style="arr.length>5 ? 'marginTop:95px': 'marginTop:0px'">
         <div>
-          <div class="m-main-content" v-for="(topics,index) in PullRefresh.result">
+          <div class="m-main-content" v-for="(topics,index) in arr">
             <div class="m-tpls" v-if="topics.style===1">
               <a href="javascript:;">
                 <div class="u-name">
@@ -128,8 +126,6 @@
           </div>
         </div>
       </div>
-
-
     <div v-show="tabType===2" style="font-size: 30px ; margin-top:100px" >上新</div>
 
     <div v-show="tabType===3" style="font-size: 30px ; margin-top:100px" >晒单</div>
@@ -147,13 +143,14 @@
         page:1,
         size:5,
         tabId:4,
+        ht:'150px'
       }
     },
     computed:{
       ...mapState({
         seeTaps:state => state.seeTaps.seeTaps,
         RecManual:state => state.seeTaps.RecManual,
-        PullRefresh:state => state.seeTaps.PullRefresh
+        arr:state => state.seeTaps.arr
       }),
       ...mapGetters(['topics']),
       //处理观看人数
@@ -169,39 +166,41 @@
       },
     },
     mounted(){
-      const {page,size,tabId,newPullRefresh} = this
+      console.log(this.PullRefresh)
+      const {page,size,tabId} = this
       this.$store.dispatch('getSeeTaps')
       this.$store.dispatch('getRecManual')
       //实现下拉刷新的请求,默认先发一次获取初始数据显示
       this.$store.dispatch('getPullRefresh',{page:page,size:size,tabId:tabId})
-    },
+  },
     methods:{
       isShow(index){
         this.tabType = index
       },
       goTo(path){
         this.$router.push(path)
-      }
+      },
     },
-   /* created(){
-      this.$nextTick(()=>{
-        this.scroll = new BScroll(this.$refs.wrapper,{
-          probeType:1,
-          click:true,
-          scrollX:false
+    created(){
+      //下拉加载
+      this.$nextTick(() => {
+        this.scroll = new BScroll(this.$refs.wrapper, {
+          probeType: 1,
+          click: true,
         })
-       this.scroll.on('scroll',(pos)=>{
-          this.$emit('scroll',pos)
-       })
-       this.scroll.on('scrollEnd',()=>{
-          if(this.scroll.y<=(this.scroll.maxScrollY + 50) ){
+        this.scroll.on('scroll', (pos) => {
+          this.$emit('scroll', pos)
+        })
+        this.scroll.on('scrollEnd', () => {
+          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
             this.$emit('scrollToEnd')
             this.page++
-            this.$store.dispatch('getPullRefresh',{page:this.page,size:5,tabId:4})
+            this.$store.dispatch('getPullRefresh', {page: this.page, size: 5, tabId: 4})
           }
-       })
-    })
-  }*/
+        })
+      })
+    }
+
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
