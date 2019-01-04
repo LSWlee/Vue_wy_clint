@@ -77,8 +77,9 @@
         <Split/>
       </div>
     </div>
-      <div class="content" v-show="tabType===1" ref="wrapper" style="height: 1000px"
-           :style="arr.length>5 ? 'marginTop:95px': 'marginTop:0px'">
+
+    <div class="content" v-show="tabType===1" ref="wrapper" style="height: 1000px"
+           :style="arr.length>5 ? 'marginTop:95px': 'marginTop:85px'">
         <div>
           <div class="m-main-content" v-for="(topics,index) in arr">
             <div class="m-tpls" v-if="topics.style===1">
@@ -166,16 +167,16 @@
       },
     },
     mounted(){
-      console.log(this.PullRefresh)
-      const {page,size,tabId} = this
+
       this.$store.dispatch('getSeeTaps')
       this.$store.dispatch('getRecManual')
-      //实现下拉刷新的请求,默认先发一次获取初始数据显示
-      this.$store.dispatch('getPullRefresh',{page:page,size:size,tabId:tabId})
+
   },
     methods:{
       isShow(index){
         this.tabType = index
+        const {page,size,tabId} = this
+        this.$store.dispatch('getPullRefresh',{page:page,size:size,tabId:tabId})
       },
       goTo(path){
         this.$router.push(path)

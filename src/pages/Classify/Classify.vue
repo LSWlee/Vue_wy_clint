@@ -14,18 +14,18 @@
       <div class="inner">
         <ul class="j-cateNav">
           <li class="item">
-            <a href="javascript:;" class="txt" :class="{active:superCategoryId===index}" v-for="(category,index) in currentCategory.categoryL1List" @click="isAdd(index)" :key="index">{{category.name}}</a>
+            <a href="javascript:;" class="txt" :class="{active:superCategoryId===index}" v-for="(category,index) in categoryL1List" @click="isAdd(index)" :key="index">{{category.name}}</a>
           </li>
         </ul>
       </div>
     </div>
-    <div class="m-subCateList">
+    <div class="m-subCateList" v-for="(category,index) in categoryL1List" v-show="superCategoryId===index">
       <div class="banner">
-        <img :src="currentCategory.currentCategory.bannerUrl" alt="">
+        <img :src="category.bannerUrl" alt="">
       </div>
       <div class="cateList">
         <ul class="list">
-          <li class="cateItem" v-for="(subCate,index) in currentCategory.currentCategory.subCateList" :key="index">
+          <li class="cateItem" v-for="(subCate,index) in category.subCateList" :key="index">
             <a href="javascript:;">
               <div class="cateImgWrapper">
                 <img :src="subCate.bannerUrl" alt="">
@@ -49,7 +49,9 @@
     },
     computed:{
       ...mapState({
-        currentCategory:state => state.classIfy.currentCategory
+        currentCategory:state => state.classIfy.currentCategory,
+        subCateList:state => state.classIfy.subCateList,
+        categoryL1List:state=>state.classIfy.categoryL1List
       })
     },
     mounted(){

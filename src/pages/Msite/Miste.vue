@@ -229,25 +229,17 @@
         </div>
         <div class="content">
           <div class="line1">
-            <a href="javascript:;">
+            <a href="javascript:;" v-for="(item,index) in oldCategoryName">
               <div class="name">
-                <span>{{categoryList[0].categoryName}}</span>
+                <span >{{item.categoryName}}</span>
               </div>
               <div class="imgWrap">
-                <img src="./images/jujia.png" alt="xxx">
-              </div>
-            </a>
-            <a href="javascript:;">
-              <div class="name">
-                <span>{{categoryList[1].categoryName}}</span>
-              </div>
-              <div class="imgWrap">
-                <img src="./images/jujia.png" alt="xxx">
+                <img :src="item.picUrl" alt="xxx">
               </div>
             </a>
           </div>
           <div class="line2">
-            <a href="javascript:;" class="item" v-for="(category,index) in newCategoryName" :key="index">
+            <a href="javascript:;" class="item" v-for="(category,index) in categoryList" :key="index">
               <div class="name">{{category.categoryName}}</div>
               <div class="imgWrap">
                 <img :src="category.picUrl" alt="">
@@ -342,7 +334,7 @@
           </a>
         </div>
         <div class="cnt">
-          <a href="javascript:;" v-for="(itemLis,index) in shops.flashSaleModule.itemList" :key="index">
+          <a href="javascript:;" v-for="(itemLis,index) in itemList" :key="index">
             <div class="imgWrap">
               <img :src="itemLis.picUrl" alt="">
             </div>
@@ -373,7 +365,7 @@
         </div>
         <div class="m-indexItem">
           <ul class="list">
-            <li class="item" v-for="(itemLis,index) in shops.flashSaleModule.itemList" :key="index">
+            <li class="item" v-for="(itemLis,index) in itemList" :key="index">
               <a href="javascript:;" class="good">
                 <div class="wraper">
                   <img :src="itemLis.picUrl">
@@ -510,16 +502,24 @@
       return{
         isShow:true,
         subCateList:'',
-        isHave:false
+        isHave:false,
       }
     },
     mounted(){
       this.$store.dispatch('getMain',()=>{
         this.$nextTick(()=>{
-           new BScroll('.m-categoryModule .inner',{
-            click:true,
-            scrollX:true,
-          })
+          //给每个遍历出来的小图片加滚动
+          const liList = document.querySelectorAll('.m-categoryModule .m-goodGrid .inner')
+          for(let i=0;i<liList.length;i++){
+            let liss = liList[i]
+            new BScroll(liList[i],{
+              click:true,
+              scrollX:true,
+              scrollY:true,
+              cancelable:false
+            })
+          }
+
         })
       })
       this.$store.dispatch('getCartList',()=>{
@@ -532,7 +532,6 @@
           })
         })
       })
-      console.log(this.categoryList)
     },
     computed:{
       ...mapState({
@@ -540,23 +539,13 @@
         shops:state => state.msite.shops,
         kingKongList:state => state.msite.kingKongList,
         categoryList:state => state.msite.categoryList,
+        itemList:state => state.msite.itemList,
       }),
-      newCategoryName(){
-        const {categoryList} = this
-        const result = categoryList.splice(0,2)
-        this.categoryList = categoryList
-        return categoryList
-      },
       oldCategoryName(){
         const {categoryList} = this
         const res = categoryList.splice(0,2)
         return res
       },
-//      categoryList:{
-//        set(){
-//          return this.categoryList
-//        }
-//      }
     },
     watch:{
       shops(){
@@ -564,6 +553,7 @@
           new Swiper('.swiper-container',{
             click:true,
             loop:true,
+            autoplay:true,
             // 如果需要分页器
             pagination: {
               el: '.swiper-pagination',
@@ -1142,6 +1132,8 @@
               top: 0;
               width: 2.66667rem;
               height: 2.66667rem;
+              img
+                width 100%
 
 
 
@@ -1302,7 +1294,7 @@
           display: block;
           color: #333;
           float: left;
-          margin-right: .26667rem;
+          margin-right: .16667rem;
           padding-bottom: .4rem;
           .imgWrap
             width: 2.88rem;

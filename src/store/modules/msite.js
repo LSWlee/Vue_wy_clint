@@ -7,7 +7,9 @@ const state = {
   shops:{},
   cartList:[],
   kingKongList:[],
-  categoryList:[]
+  categoryList:[],
+
+  itemList:[]
 
 }
 const actions = {
@@ -15,7 +17,10 @@ const actions = {
     let result = await reqMain()
    if(result.code===0){
       const shops = result.data
-      commit(RECEIVE_SHOPS,{shops})
+     const {kingKongList} = result.data.kingKongModule
+     const {categoryList} = result.data.categoryHotSellModule
+     const {itemList} = result.data.flashSaleModule
+      commit(RECEIVE_SHOPS,{shops,kingKongList,categoryList,itemList})
      typeof callback==='function' && callback()
    }
   },
@@ -32,10 +37,11 @@ const getters = {
 
 }
 const mutations = {
-  [RECEIVE_SHOPS](state,{shops}){
+  [RECEIVE_SHOPS](state,{shops,kingKongList,categoryList,itemList}){
     state.shops = shops
-    state.kingKongList = shops.kingKongModule.kingKongList
-    state.categoryList = shops.categoryHotSellModule.categoryList
+    state.kingKongList = kingKongList
+    state.categoryList = categoryList
+    state.itemList = itemList
   },
   [RECEIVE_CART_LIST](state,{cartList}){
     state.cartList = cartList
