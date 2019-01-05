@@ -9,7 +9,7 @@
         <span>
           <i class="iconfont icon-sousuo1"></i>
         </span>
-          <span>搜索商品共1111款好物</span>
+          <span @click="$router.push('/search')">搜索商品共1111款好物</span>
         </div>
         <button>登陆</button>
       </div>
@@ -26,7 +26,7 @@
         </div >
         <!--三角切换-->
         <div class="m-indexHd">
-          <div class="line">
+          <div class="line" v-show="isHave">
             <a href="javascript:;" class="logo">
               <img src="./images/logo.png" alt="logo">
             </a>
@@ -570,11 +570,11 @@
       yes(){
         this.isShow = true
         this.subCateList = ''
-      }
+      },
     }
   }
 </script>
-<style lang="stylus" rel="stylesheet/stylus" scoped>
+<style lang="stylus" rel="stylesheet/stylus">
   #header
     position fixed
     left 0px
@@ -791,6 +791,14 @@
     width 100%
     height: 4.93333rem;
     margin-top 150px
+    .swiper-pagination
+      text-align center
+      .swiper-pagination-bullet
+        display inline-block
+        width 50px
+        height 10px
+        background #fff
+        border-radius 5px
     .swiper-wrapper
       width 800%
       height 100%

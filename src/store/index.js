@@ -10,7 +10,7 @@ import getters from './getters'
 import msite from './modules/msite'
 import classIfy from './modules/classIfy'
 import seeTaps from './modules/see'
-
+import Search from './modules/Search'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -19,6 +19,7 @@ export default new Vuex.Store({
   modules:{
     msite,
     classIfy,
-    seeTaps
+    seeTaps,
+    Search
   }
 })

@@ -9,6 +9,7 @@ import ShopCart from '../pages/ShopCart/ShopCart.vue'
 import SelectPerson from '../pages/SelectPerson/SelectPerson.vue'
 import Phonelogin from '../pages/Phonelogin/Phonelogin.vue'
 import MessageLogin from '../pages/MessageLogin/MessageLogin.vue'
+import Search from '../pages/Search/Search.vue'
 export default [
   {
     path:'/msite',
@@ -56,6 +57,10 @@ export default [
   {
     path:'/messagelogin',
     component:MessageLogin,
+  },
+  {
+    path:'/search',
+    component:Search,
   },
   {
     path:'/',

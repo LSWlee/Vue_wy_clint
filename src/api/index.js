@@ -19,3 +19,9 @@ export const reqRecManual = () => ajax('/api/topic/v1/find/recManual.json')
 //定义实现下拉刷新的请求
 //http://m.you.163.com/topic/v1/find/getTabData.json?page=1&size=5&tabId=4
 export const reqPullRefresh = ({page,size,tabId}) => ajax('/api/topic/v1/find/getTabData.json',{page,size,tabId})
+
+//定义获取热门搜索的数据请求http://m.you.163.com/xhr/search/init.json
+export const reqHotSearch = () => ajax('/api/xhr/search/init.json','POST')
+
+//定义搜索的接口 http://m.you.163.com/xhr/search/searchAutoComplete.json?csrf_token=b3562f9291acf772228f8aa617e
+export const reqSeacrhComplete = (keywordPrefix) => ajax(`/api/xhr/search/searchAutoComplete.json`,{keywordPrefix})
