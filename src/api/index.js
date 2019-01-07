@@ -25,3 +25,12 @@ export const reqHotSearch = () => ajax('/api/xhr/search/init.json','POST')
 
 //定义搜索的接口 http://m.you.163.com/xhr/search/searchAutoComplete.json?csrf_token=b3562f9291acf772228f8aa617e
 export const reqSeacrhComplete = (keywordPrefix) => ajax(`/api/xhr/search/searchAutoComplete.json`,{keywordPrefix})
+
+//晒单title请求https://m.you.163.com/topic/v1/look/homeData.json
+export const reqSeeTitle = () => ajax('/api/topic/v1/look/homeData.json')
+
+//晒单title图片请求https://m.you.163.com/topic/v1/look/getCollection.json?id=26
+export const reqSeecollecTion = ({id}) => ajax('/api/topic/v1/look/getCollection.json',{id})
+
+//晒单最新https://m.you.163.com/topic/v1/look/getList.json?page=1&size=20&type=1
+export const reqBetterNew = ({page,size,type}) => ajax('/api/topic/v1/look/getList.json',{page,size,type})

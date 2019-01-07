@@ -69,7 +69,6 @@
             this.BScroll.on('pullingUp',()=>{
                 this.$store.dispatch('getexpertlist',{page:this.ispage+1,size:5,tabId:4});
                 this.BScroll.finishPullUp()
-
               }
             )
           this.BScroll.refresh()
