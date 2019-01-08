@@ -207,6 +207,7 @@
         tabId:4,
         ht:'150px',
         id:26,
+        isTrue:true
       }
     },
     computed:{
@@ -275,25 +276,21 @@
               }
           })
         }else{
-          let lastTime = 0;
-          this.bscroll3.on('pullingUp',()=>{
-            const nowTime = +Date.now();
-
-            console.log(nowTime,'now')
-            console.log(lastTime,'last')
-            if (nowTime - lastTime <= 5000) return;
-            lastTime = nowTime
-            setTimeout(()=>{
-              console.log('发送请求')
-              this.page = this.page+1
+          if(this.isTrue){
+            this.isTrue = false
+            this.bscroll3.on('pullingUp',()=>{
+              setTimeout(()=>{
+                console.log('发送请求')
+                this.page = this.page+1
               this.$store.dispatch('getSeeBetterNew',{page:this.page,size:20,type:1})
+              this.bscroll3.finishPullUp()
+              this.isTrue = true
             },2000)
+            })
 
-          })
+            this.bscroll3.refresh()
+          }
         }
-        this.bscroll3.finishPullUp()
-        console.log(this.page)
-        this.bscroll3.refresh()
       }
     },
     created(){
